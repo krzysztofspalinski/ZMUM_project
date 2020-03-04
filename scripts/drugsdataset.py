@@ -8,6 +8,8 @@ Class DrugsDataset implements:
 import pandas as pd
 import numpy as np
 import os
+import nltk
+from sklearn.feature_extraction.text import CountVectorizer
 
 
 class DrugsDataset:
@@ -39,7 +41,15 @@ class DrugsDataset:
         :return:
         """
 
-
+    def create_bag_of_words(self):
+        count_vectorizer = CountVectorizer(analyzer="word",
+                                           tokenizer=nltk.word_tokenize,
+                                           preprocessor=None,
+                                           stop_words='english',
+                                           max_features=None)
+        bag_of_words_train = count_vectorizer.fit_transform(self.train['opinion'])
+        bag_of_words_test = count_vectorizer.transform(self.test['opinion'])
+        return bag_of_words_train, bag_of_words_test
 
 def main():
     DATA_PATH = "/home/jakubkala/IAD/semestr-2/zmum/ZMUM_project/data"
